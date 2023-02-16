@@ -1,0 +1,20 @@
+<th *ngIf="hasExpand" nzWidth="5px"></th>
+<th *ngIf="hasCheckBox" [nzChecked]="checked" [nzIndeterminate]="indeterminate" nzWidth="5px"
+    (nzCheckedChange)="__onEvent('checkedChange', $event)">
+</th>
+<th *ngFor="let col of cols" [nzCustomFilter]="col.filter" [style]="col.headerStyle" [nzColumnKey]="col.code"
+    nzSortOrder="{{col.sortOrder}}" [nzSortFn]="true" [nzFilterFn]="true" [nzSortPriority]="sortPriority"
+    [nzSortDirections]="col.sortDirections ? col.sortDirections : [null]">
+    <div *ngIf="col.headerHtml !== undefined" [innerHtml]="col.headerHtml"></div>
+    <div *ngIf="col.headerHtml === undefined">{{col.name | translate}}</div>
+    <nz-filter-trigger *ngIf="col.filter" [(nzVisible)]="filterVisible[col.code]"
+        (nzVisibleChange)="__onEvent('visibleChange', {code: col.code, value: $event})"
+        [nzActive]="col.searchValue !== undefined && col.searchValue.toString().length > 0"
+        [nzDropdownMenu]="filterDropdownMenu">
+        <i nz-icon nzType="filter"></i>
+    </nz-filter-trigger>
+</th>
+
+<th *ngIf="hasColumnAction && columnActions.length > 0" nzWidth="{{actionColumnWidth}}" style="text-align: center;">
+    {{'button.action.label'|translate}}
+</th>

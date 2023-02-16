@@ -1,0 +1,7 @@
+<div>
+    <textarea rows="{{formField.rows}}" nz-input [(ngModel)]="value" (ngModelChange)="__onEvent('modelChange', $event)"
+        placeholder="{{formField.placeholder}}"></textarea>
+</div>
+<div>
+    <ngx-json-viewer [json]="obj" [expanded]="false" style="font-size: 0.85em !important;"></ngx-json-viewer>
+</div>

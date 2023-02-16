@@ -1,0 +1,110 @@
+<form nz-form [formGroup]="validateForm">
+    <div nz-row [nzGutter]="24" class="form-row-padding">
+        <ng-container *ngFor="let formField of formFields">
+            <div *ngIf="formField.inVisible !== true" nz-col nzSpan="{{formField.span}}" class="form-col-padding">
+                <nz-divider *ngIf="formField.type==='divider'" nzPlain [nzText]="formField.name" nzOrientation="left"
+                    style="margin-top: 0px;"></nz-divider>
+                <nz-form-item *ngIf="!['divider', 'blank'].includes(formField.type)">
+                    <nz-form-label nz-col nzSpan="{{labelWidth*12/(formField.span ? formField.span : 12)}}"
+                        [nzRequired]="formField.required===true" [nzNoColon]="true" nzFor="{{formField.code}}"
+                        [nzTooltipTitle]="formField.labelTooltipHtml || formField.labelTooltip ? labelTooltip : undefined">
+                        {{(formField.name ? formField.name : '') | translate}}</nz-form-label>
+                    <nz-form-control nz-col nzSpan="{{24 - labelWidth*12/(formField.span ? formField.span : 12)}}"
+                        [nzErrorTip]="combineTpl">
+                        <!-- text -->
+                        <!-- email -->
+                        <app-input-text *ngIf="['email', 'text'].includes(formField.type)" [formField]="formField"
+                            formControlName="{{formField.code}}" id="{{formField.code}}">
+                        </app-input-text>
+
+                        <!-- select -->
+                        <app-select *ngIf="formField.type==='select'" [formField]="formField"
+                            formControlName="{{formField.code}}" id="{{formField.code}}"
+                            (onSearch)="__onEvent('onSearch', {code: formField.code, value: $event, formField: formField})">
+                        </app-select>
+
+                        <!-- password -->
+                        <nz-input-group *ngIf="formField.type==='password'" [nzSuffix]="suffixTemplate">
+                            <input [type]="formField.passwordVisible ? 'text' : 'password'" nz-input
+                                formControlName="{{formField.code}}" placeholder="{{formField.placeholder}}" />
+                        </nz-input-group>
+                        <ng-template #suffixTemplate>
+                            <i nz-icon [nzType]="formField.passwordVisible ? 'eye-invisible' : 'eye'"
+                                (click)="formField.passwordVisible = !formField.passwordVisible"></i>
+                        </ng-template>
+
+                        <!-- datePicker -->
+                        <nz-date-picker *ngIf="formField.type==='datePicker'" style="width: 100%"
+                            [nzShowTime]="formField.dataPickerShowTime" nzMode="{{formField.datePickerMode}}"
+                            formControlName="{{formField.code}}">
+                        </nz-date-picker>
+
+                        <!-- dateRangePicker -->
+                        <nz-range-picker *ngIf="formField.type==='dateRangePicker'" style="width: 100%"
+                            [nzShowTime]="formField.dataPickerShowTime" formControlName="{{formField.code}}"
+                            nzMode="{{formField.datePickerMode}}"></nz-range-picker>
+
+                        <!-- textarea -->
+                        <textarea rows="{{formField.rows}}" *ngIf="formField.type==='textarea'" nz-input
+                            formControlName="{{formField.code}}" placeholder="{{formField.placeholder}}"></textarea>
+
+                        <!-- number -->
+                        <nz-input-number *ngIf="formField.type==='number'" style="width: 100%"
+                            formControlName="{{formField.code}}">
+                        </nz-input-number>
+
+                        <!-- switch -->
+                        <nz-switch *ngIf="formField.type==='switch'" formControlName="{{formField.code}}"
+                            [nzCheckedChildren]="checkedTemplate" [nzUnCheckedChildren]="unCheckedTemplate">
+                        </nz-switch>
+                        <ng-template #checkedTemplate><i nz-icon nzType="check"></i></ng-template>
+                        <ng-template #unCheckedTemplate><i nz-icon nzType="close"></i></ng-template>
+
+                        <!-- timePicker -->
+                        <nz-time-picker *ngIf="formField.type==='timePicker'" style="width: 100%"
+                            formControlName="{{formField.code}}">
+                        </nz-time-picker>
+
+                        <!-- editor -->
+                        <editor *ngIf="formField.type==='editor'" formControlName="{{formField.code}}"
+                            (onPaste)="__onEvent('onPaste', formField)" [apiKey]="env.tinyMCEApiKey"
+                            [init]="editorInit">
+                        </editor>
+
+                        <!-- upload -->
+                        <app-upload *ngIf="formField.type==='upload'" [formField]="formField"
+                            formControlName="{{formField.code}}" id="{{formField.code}}">
+                        </app-upload>
+
+                        <ng-template #combineTpl let-control>
+                            <ng-container *ngIf="control.hasError('maxlength')">MaxLength is {{formField.maxLength}}
+                            </ng-container>
+                            <ng-container *ngIf="control.hasError('minlength')">MinLength is {{formField.minLength}}
+                            </ng-container>
+                            <ng-container *ngIf="control.hasError('required')">Input is required</ng-container>
+                            <ng-container *ngIf="control.hasError('pattern')">
+                                <span *ngIf="formField.patternError">{{formField.patternError}}</span>
+                                <span *ngIf="!formField.patternError">Input is wrong pattern <strong>{{formField.pattern}}</strong></span>
+                            </ng-container>
+                            <ng-container *ngIf="control.hasError('email')">Required email pattern</ng-container>
+                        </ng-template>
+
+                        <ng-template #labelTooltip>
+                            <ng-container *ngIf="formField.labelTooltipHtml === undefined">
+                                {{formField.labelTooltip}}
+                            </ng-container>
+                            <ng-container *ngIf="formField.labelTooltipHtml !== undefined">
+                                <div [innerHTML]="formField.labelTooltipHtml"></div>
+                            </ng-container>
+                        </ng-template>
+
+                        <div *ngIf="formField.tryPreview === true && formField.code && data[formField.code]"
+                            style="padding-top: 10px;">
+                            <app-preview [formField]="formField" [data]="data[formField.code]"></app-preview>
+                        </div>
+                    </nz-form-control>
+                </nz-form-item>
+            </div>
+        </ng-container>
+    </div>
+</form>

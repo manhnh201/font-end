@@ -1,0 +1,12 @@
+<nz-input-group [nzSuffix]="suffixIcon" style="margin-bottom: 10px;">
+    <input type="text" nz-input placeholder="Search" [(ngModel)]="searchValue" />
+</nz-input-group>
+<ng-template #suffixIcon>
+    <i nz-icon nzType="search"></i>
+</ng-template>
+
+<nz-tree #tree nzAsyncData [nzSearchValue]="searchValue" [nzData]="data" [nzCheckable]="checkable === true"
+    [nzMultiple]="multiple === true" [nzCheckedKeys]="checkedKeys" [nzSelectedKeys]="checkedKeys"
+    (nzClick)="__onEvent('onClick', $event)" (nzExpandChange)="__onEvent('onExpandChange', $event)"
+    (nzCheckBoxChange)="__onEvent('onCheckBoxChange', $event)">
+</nz-tree>

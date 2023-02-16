@@ -1,0 +1,6 @@
+<app-domain-list #appDomainList [cols]="domainConfigTemplate.tableColumns" [dataSet]="dataSet" [hasExpand]="false"
+  [hasCheckBox]="true" checkedKey="id" [loading]="loading" [hasColumnAction]="false"
+  [columnActions]="domainConfigTemplate.tableColumnActions" [hasAction]="true" [actions]="domainConfigTemplate.actions"
+  [totalRows]="totalRows" [tableFilter]="tableFilter" (onEvent)="onEvent($event.sender, $event.event)"
+  [hasContextMenu]="false">
+</app-domain-list>

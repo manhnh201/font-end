@@ -1,0 +1,18 @@
+<!-- text -->
+<ng-container *ngIf="formField.actions && formField.actions.length > 0; else noneAction">
+    <nz-input-group [nzSuffix]="suffixIcon">
+        <input *ngIf="formField.type==='text'" nz-input placeholder="{{formField.placeholder}}" [(ngModel)]="value"
+            (ngModelChange)="__onEvent('modelChange', $event)" [disabled]="disabled">
+    </nz-input-group>
+    <ng-template #suffixIcon>
+        <ng-container *ngFor="let action of formField.actions">
+            <span nz-icon [nzType]="action.icon" style="cursor: pointer; padding-left: 10px;" (click)="__onEvent('click', action)"></span>
+        </ng-container>
+    </ng-template>
+</ng-container>
+<ng-template #noneAction>
+    <input *ngIf="formField.type==='text'" nz-input placeholder="{{formField.placeholder}}" [(ngModel)]="value"
+        (ngModelChange)="__onEvent('modelChange', $event)" [disabled]="disabled">
+    <input *ngIf="formField.type==='email'" nz-input type="email" placeholder="{{formField.placeholder}}"
+        [(ngModel)]="value" (ngModelChange)="__onEvent('modelChange', $event)" [disabled]="disabled">
+</ng-template>

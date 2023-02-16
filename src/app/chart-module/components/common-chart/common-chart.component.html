@@ -1,0 +1,6 @@
+<ng-container *ngIf="__dataset !== undefined && __dataset.length > 0">
+    <apx-chart [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis" [yaxis]="chartOptions.yaxis"
+        [plotOptions]="chartOptions.plotOptions" [series]="chartOptions.series" [grid]="chartOptions.grid"
+        [dataLabels]="chartOptions.dataLabels" [stroke]="chartOptions.stroke" [colors]="chartOptions.colors"
+        [markers]="chartOptions.markers" [title]="chartOptions.title"></apx-chart>
+</ng-container>

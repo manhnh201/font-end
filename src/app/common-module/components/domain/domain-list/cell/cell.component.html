@@ -1,0 +1,28 @@
+<ng-container [ngSwitch]="col.tag">
+    <a *ngSwitchCase="'a'" [href]="colData[col.code]" target="_blank">
+        {{col.pipe !== 'date' ? colData[col.code] : (colData[col.code] | date: col.pipeFormat ?
+        col.pipeFormat : 'yyyy/MM/dd HH:mm:ss')}}</a>
+    <ng-container *ngSwitchCase="'img'">
+        <img nz-image width="auto" height="50px" [nzSrc]="colData[col.code]" alt="" />
+    </ng-container>
+    <ng-container *ngSwitchCase="'tag'">
+        <nz-tag *ngFor="let _item of colData[col.code];">{{_item}}</nz-tag>
+    </ng-container>
+    <ng-container *ngSwitchCase="'icon'">
+        <span nz-icon [nzType]="item[col.code]" nzTheme="outline"></span>
+    </ng-container>
+    <ng-container *ngSwitchCase="'html'">
+        <div [innerHTML]="item[col.code]"></div>
+    </ng-container>
+    <ng-container *ngSwitchCase="'check'">
+        <span *ngIf="item[col.code] == true" style="color: green; font-weight: 700">✓</span>
+        <span *ngIf="item[col.code] == false" style="color: red; font-weight: 700; opacity: 50%;">✗</span>
+    </ng-container>
+    <ng-container *ngSwitchCase="'json'">
+        <ngx-json-viewer [json]="colData[col.code]" [expanded]="false"></ngx-json-viewer>
+    </ng-container>
+    <span *ngSwitchDefault>
+        {{col.pipe !== 'date' ? colData[col.code] : (colData[col.code] | date: col.pipeFormat ?
+        col.pipeFormat : 'yyyy/MM/dd HH:mm:ss')}}
+    </span>
+</ng-container>

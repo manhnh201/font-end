@@ -1,0 +1,13 @@
+<nz-collapse>
+    <nz-collapse-panel nzHeader="Main Panel" [nzActive]="!dataPanelActive" [nzDisabled]="false"
+        (nzActiveChange)="onEvent('panelActiveChange', $event)">
+        <app-domain-list [cols]="domainConfigTemplate.tableColumns" [dataSet]="dataSet" [hasExpand]="false"
+            [hasCheckBox]="false" [loading]="loading" [hasColumnAction]="true"
+            [columnActions]="domainConfigTemplate.tableColumnActions" [hasAction]="true"
+            [actions]="domainConfigTemplate.actions" [totalRows]="totalRows" [tableFilter]="tableFilter"
+            (onEvent)="onEvent($event.sender, $event.event)">
+        </app-domain-list>
+    </nz-collapse-panel>
+    <nz-collapse-panel nzHeader="Sub Panel" [nzActive]="dataPanelActive" [nzDisabled]="!dataPanelActive">
+    </nz-collapse-panel>
+</nz-collapse>

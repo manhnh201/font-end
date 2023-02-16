@@ -1,0 +1,181 @@
+<div nz-row style="margin-bottom: 10px;">
+    <div nz-col nzSpan="6">
+        <ng-container *ngIf="quickSearchAllow">
+            <nz-input-group [nzSuffix]="suffixIconSearch" [nzSize]="size">
+                <input type="text" nz-input [placeholder]="quickSearchPlaceholder" [(ngModel)]="quickSearchValue"
+                    (keyup)="__onEvent(DomainListSenderEnum.__quickSearchKeyUp, $event)" />
+            </nz-input-group>
+            <ng-template #suffixIconSearch>
+                <i nz-icon nzType="search" (click)="__onEvent(DomainListSenderEnum.quickSearch, quickSearchValue)"></i>
+            </ng-template>
+        </ng-container>
+    </div>
+    <div nz-col nzSpan="12" nzOffset="6" *ngIf="hasAction && actions.length > 0" style="text-align: right;">
+        <ng-container *ngFor="let action of actions">
+            <app-action-button [action]="action"></app-action-button>
+        </ng-container>
+    </div>
+</div>
+
+<div *ngIf="ajax; else elseAjaxBlock">
+    <nz-table #basicTable [nzSize]="size" [nzBordered]="true" [nzData]="dataSet" [nzLoading]="loading"
+        [nzTableLayout]="__tableLayout" [nzScroll]="__scroll" [(nzPageSize)]="tableFilter.rows" nzShowPagination="true"
+        [nzFrontPagination]="false" [nzShowTotal]="rangeTemplate" [nzTotal]="totalRows" nzShowQuickJumper="true"
+        nzShowSizeChanger="true" (nzQueryParams)="__onEvent(DomainListSenderEnum.onQueryParamsChange, $event)"
+        (nzCurrentPageDataChange)="__onEvent(DomainListSenderEnum.currentPageDataChange, $event)">
+        <thead>
+            <tr>
+                <th *ngIf="hasExpand" nzWidth="5px"></th>
+                <th *ngIf="hasCheckBox" nzWidth="5px"
+                    [nzChecked]="dataSet !== undefined && setOfSelection.size === dataSet.length"
+                    [nzIndeterminate]="dataSet !== undefined && setOfSelection.size < dataSet.length && setOfSelection.size > 0"
+                    (nzCheckedChange)="__onEvent(DomainListSenderEnum.__checkedAllChange, $event)">
+                </th>
+                <th *ngFor="let col of cols; let __idx=index;" [nzCustomFilter]="col.filter" [style]="col.headerStyle"
+                    nzWidth="{{col.width}}" [nzColumnKey]="col.code" nzSortOrder="{{col.sortOrder}}" [nzSortFn]="true"
+                    [nzFilterFn]="true" [nzSortPriority]="multipleSort"
+                    [nzSortDirections]="col.sortDirections ? col.sortDirections : [null]">
+                    <div *ngIf="col.headerHtml !== undefined" [innerHtml]="col.headerHtml"></div>
+                    <div *ngIf="col.headerHtml === undefined">{{col.name | translate}}</div>
+                    <nz-filter-trigger *ngIf="col.filter" [(nzVisible)]="filterVisible[col.code]"
+                        (nzVisibleChange)="__onEvent(DomainListSenderEnum.nzVisibleChange, {code: col.code, value: $event})"
+                        [nzActive]="col.searchValue !== undefined && col.searchValue.toString().length > 0"
+                        [nzDropdownMenu]="menu">
+                        <i nz-icon nzType="filter"></i>
+                    </nz-filter-trigger>
+                </th>
+                <th *ngIf="hasColumnAction && columnActions.length > 0" nzWidth="{{actionColumnWidth}}"
+                    style="text-align: center;">
+                    {{'button.action.label'|translate}}
+                </th>
+            </tr>
+        </thead>
+        <tbody cdkDropList (cdkDropListDropped)="__drop($event)">
+            <ng-container *ngFor="let item of basicTable.data; let _idx = index">
+                <tr app-row [cols]="cols" [hasColumnAction]="hasColumnAction" [columnActions]="columnActions"
+                    [item]="item" [hasCheckBox]="hasCheckBox" [checked]="setOfSelection.has(item[checkedKey])"
+                    [hasExpand]="hasExpand" cdkDrag cdkDragLockAxis="y" [cdkDragDisabled]="dragDisabled"
+                    (onExpandChange)="item.expand=$event; item['_idx'] = _idx; __onEvent(DomainListSenderEnum.expandChange, {item: item, value: $event})"
+                    (onCheckedChange)="__onEvent(DomainListSenderEnum.__checkedChange, {item: item, value: $event})"
+                    (onCellClick)="__onEvent(DomainListSenderEnum.onCellClick, {code: $event, value: item})"
+                    (contextmenu)="__onEvent(DomainListSenderEnum.__showRowContextMenu, {event: $event, menu: rowContextMenu, item: item})">
+                </tr>
+                <tr [nzExpand]="item.expand">
+                    <ng-template appRowExpand></ng-template>
+                </tr>
+            </ng-container>
+        </tbody>
+    </nz-table>
+</div>
+
+<ng-template #elseAjaxBlock>
+    <nz-table #basicTable [nzSize]="size" [nzTableLayout]="__tableLayout" [nzScroll]="__scroll" [nzBordered]="true"
+        [nzLoading]="loading" [nzData]="dataSet" nzShowPagination="true" [nzShowTotal]="rangeTemplate"
+        [nzTotal]="totalRows" nzShowQuickJumper="true" nzShowSizeChanger="true">
+        <thead>
+            <tr>
+                <th *ngIf="hasExpand" nzWidth="5px"></th>
+                <th *ngIf="hasCheckBox" [nzChecked]="dataSet !== undefined && setOfSelection.size === dataSet.length"
+                    [nzIndeterminate]="dataSet !== undefined && setOfSelection.size < dataSet.length && setOfSelection.size > 0"
+                    nzWidth="5px" (nzCheckedChange)="__onEvent(DomainListSenderEnum.__checkedAllChange, $event)">
+                </th>
+                <th *ngFor="let col of cols" [nzCustomFilter]="col.filter" [style]="col.headerStyle"
+                    [nzColumnKey]="col.code" nzSortOrder="{{col.sortOrder}}" [nzSortFn]="true" [nzFilterFn]="true"
+                    [nzSortPriority]="multipleSort"
+                    [nzSortDirections]="col.sortDirections ? col.sortDirections : [null]">
+                    <div *ngIf="col.headerHtml !== undefined" [innerHtml]="col.headerHtml"></div>
+                    <div *ngIf="col.headerHtml === undefined">{{col.name | translate}}</div>
+                    <nz-filter-trigger *ngIf="col.filter" [(nzVisible)]="filterVisible[col.code]"
+                        (nzVisibleChange)="__onEvent(DomainListSenderEnum.nzVisibleChange, {code: col.code, value: $event})"
+                        [nzActive]="col.searchValue !== undefined && col.searchValue.toString().length > 0"
+                        [nzDropdownMenu]="menu">
+                        <i nz-icon nzType="filter"></i>
+                    </nz-filter-trigger>
+                </th>
+
+                <th *ngIf="hasColumnAction && columnActions.length > 0" nzWidth="{{actionColumnWidth}}"
+                    style="text-align: center;">
+                    {{'button.action.label'|translate}}
+                </th>
+            </tr>
+        </thead>
+        <tbody cdkDropList (cdkDropListDropped)="__drop($event)">
+            <ng-container *ngFor="let item of basicTable.data; let _idx = index">
+                <tr app-row [cols]="cols" [hasColumnAction]="hasColumnAction" [columnActions]="columnActions"
+                    [item]="item" [hasCheckBox]="hasCheckBox" [checked]="setOfSelection.has(item[checkedKey])"
+                    [hasExpand]="hasExpand" cdkDrag cdkDragLockAxis="y" [cdkDragDisabled]="dragDisabled"
+                    (onExpandChange)="item.expand=$event; item['_idx'] = _idx; __onEvent(DomainListSenderEnum.expandChange, {item: item, value: $event})"
+                    (onCheckedChange)="__onEvent(DomainListSenderEnum.__checkedChange, {item: item, value: $event})"
+                    (onCellClick)="__onEvent(DomainListSenderEnum.onCellClick, {code: $event, value: item})"
+                    (contextmenu)="__onEvent(DomainListSenderEnum.__showRowContextMenu, {event: $event, menu: rowContextMenu, item: item})">
+                </tr>
+                <tr [nzExpand]="item.expand">
+                    <ng-template appRowExpand></ng-template>
+                </tr>
+            </ng-container>
+        </tbody>
+    </nz-table>
+</ng-template>
+
+<ng-template #tableBody let-basicTable>
+    <ng-container *ngFor="let item of basicTable.data; let _idx = index">
+        <tr app-row [cols]="cols" [hasColumnAction]="hasColumnAction" [columnActions]="columnActions" [item]="item"
+            [hasCheckBox]="hasCheckBox" [checked]="setOfSelection.has(item[checkedKey])" [hasExpand]="hasExpand" cdkDrag
+            cdkDragLockAxis="y" [cdkDragDisabled]="dragDisabled"
+            (onExpandChange)="item.expand=$event; item['_idx'] = _idx; __onEvent(DomainListSenderEnum.expandChange, {item: item, value: $event})"
+            (onCheckedChange)="__onEvent(DomainListSenderEnum.__checkedChange, {item: item, value: $event})"
+            (onCellClick)="__onEvent(DomainListSenderEnum.onCellClick, {code: $event, value: item})"
+            (contextmenu)="__onEvent(DomainListSenderEnum.__showRowContextMenu, {event: $event, menu: rowContextMenu, item: item})">
+        </tr>
+        <tr [nzExpand]="item.expand">
+            <ng-template appRowExpand></ng-template>
+        </tr>
+    </ng-container>
+</ng-template>
+
+<ng-template #totalTemplate let-total>Total {{ total }} items</ng-template>
+<ng-template #rangeTemplate let-range="range" let-total>{{ range[0] }}-{{ range[1] }} of {{ total }} items</ng-template>
+
+<nz-dropdown-menu #menu="nzDropdownMenu">
+    <div class="ant-table-filter-dropdown">
+        <div class="search-box">
+            <div [ngSwitch]="filterType">
+                <nz-date-picker *ngSwitchCase="'datePicker'" style="width: 100%; margin-bottom: 5px;"
+                    (keyup)="__onEvent(DomainListSenderEnum.__searchKeyUp, {event: $event, searchValue: searchValue})"
+                    [(ngModel)]="searchValue"></nz-date-picker>
+                <nz-range-picker *ngSwitchCase="'dateRangePicker'" style="width: 100%; margin-bottom: 5px;"
+                    (keyup)="__onEvent(DomainListSenderEnum.__searchKeyUp, {event: $event, searchValue: searchValue})"
+                    [(ngModel)]="searchValue"></nz-range-picker>
+                <nz-select *ngSwitchCase="'select'" type="text" nzShowSearch nzAllowClear
+                    style="width: 100%; margin-bottom: 5px;" [(ngModel)]="searchValue">
+                    <nz-option *ngFor="let option of searchOptions" [nzLabel]="option.label" [nzValue]="option.value">
+                    </nz-option>
+                </nz-select>
+                <input *ngSwitchDefault type="text" nz-input placeholder="Search {{colMatchMode}}"
+                    (keyup)="__onEvent(DomainListSenderEnum.__searchKeyUp, {event: $event, searchValue: searchValue})"
+                    [(ngModel)]="searchValue" />
+            </div>
+            <button nz-button nzSize="small" nzType="primary" class="search-button"
+                (click)="__onEvent(DomainListSenderEnum.search, searchValue)">Search</button>
+            <button nz-button nzSize="small" (click)="__onEvent(DomainListSenderEnum.reset)">Reset</button>
+        </div>
+    </div>
+</nz-dropdown-menu>
+
+<nz-dropdown-menu #rowContextMenu="nzDropdownMenu">
+    <ul nz-menu>
+        <ng-container *ngFor="let button of rowContextMenuActions;">
+            <li *ngIf="button.needConfirm===true" nz-menu-item nz-popconfirm [nzPopconfirmTitle]="button.confirmMessage"
+                [nzPopconfirmBackdrop]="true"
+                (nzOnConfirm)="__onEvent(DomainListSenderEnum.__onRowContextMenuClick, {code: button.code, value: __selectedItem})">
+                <span nz-icon [nzType]="button.icon"></span>&nbsp;&nbsp;&nbsp;
+                <span>{{button.name| translate}}</span>
+            </li>
+            <li *ngIf="button.needConfirm!==true" nz-menu-item
+                (click)="__onEvent(DomainListSenderEnum.__onRowContextMenuClick, {code: button.code, value: __selectedItem})">
+                <span nz-icon [nzType]="button.icon"></span>&nbsp;&nbsp;&nbsp;
+                <span>{{button.name| translate}}</span>
+            </li>
+        </ng-container>
+    </ul>
+</nz-dropdown-menu>

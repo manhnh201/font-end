@@ -1,0 +1,20 @@
+<nz-timeline>
+    <ng-container *ngFor="let item of dataset;">
+        <nz-timeline-item [nzColor]="item[colorKey] || 'blue'">
+            <div>
+                <span style="color: gray;">{{item[timestampKey]}}</span>
+            </div>
+            <ng-container [ngSwitch]="contentType">
+                <ng-container *ngSwitchCase="'html'">
+                    <div [innerHTML]="item[contentKey]"></div>
+                </ng-container>
+                <div *ngSwitchDefault>
+                    {{item[contentKey]}}
+                </div>
+            </ng-container>
+        </nz-timeline-item>
+    </ng-container>
+    <ng-container *ngIf="dataset.length === 0">
+        {{datasetEmptyMessage}}
+    </ng-container>
+</nz-timeline>

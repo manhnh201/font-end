@@ -1,0 +1,10 @@
+<li *ngIf="item.childs.length > 0" nz-submenu nzTitle="{{item.title}}" nzIcon="{{item.icon}}">
+    <ul>
+        <ng-container *ngFor="let _item of item.childs;">
+            <app-menu-sider-item [item]="_item"></app-menu-sider-item>
+        </ng-container>
+    </ul>
+</li>
+<li *ngIf="item.childs.length === 0" nz-menu-item>
+    <i nz-icon nzType="{{item.icon}}" nzTheme="outline"></i><span>{{item.title}}</span>
+</li>

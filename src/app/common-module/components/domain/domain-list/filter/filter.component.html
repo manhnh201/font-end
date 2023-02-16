@@ -1,0 +1,22 @@
+<div class="ant-table-filter-dropdown">
+    <div class="search-box">
+        <div [ngSwitch]="filterType">
+            <nz-date-picker *ngSwitchCase="'datePicker'" style="width: 100%; margin-bottom: 5px;"
+                (keyup)="__onEvent('__keyup', {event: $event, searchValue: searchValue})" [(ngModel)]="searchValue">
+            </nz-date-picker>
+            <nz-range-picker *ngSwitchCase="'dateRangePicker'" style="width: 100%; margin-bottom: 5px;"
+                (keyup)="__onEvent('__keyup', {event: $event, searchValue: searchValue})" [(ngModel)]="searchValue">
+            </nz-range-picker>
+            <nz-select *ngSwitchCase="'select'" type="text" nzShowSearch nzAllowClear
+                style="width: 100%; margin-bottom: 5px;" [(ngModel)]="searchValue">
+                <nz-option *ngFor="let option of searchOptions" [nzLabel]="option.label" [nzValue]="option.value">
+                </nz-option>
+            </nz-select>
+            <input *ngSwitchDefault type="text" nz-input placeholder="Search {{colMatchMode}}"
+                (keyup)="__onEvent('__keyup', {event: $event, searchValue: searchValue})" [(ngModel)]="searchValue" />
+        </div>
+        <button nz-button nzSize="small" nzType="primary" class="search-button"
+            (click)="__onEvent('search', searchValue)">Search</button>
+        <button nz-button nzSize="small" (click)="__onEvent('reset')">Reset</button>
+    </div>
+</div>

@@ -1,0 +1,26 @@
+<td *ngIf="hasExpand" [nzExpand]="item.expand ? item.expand : false"
+    (nzExpandChange)="__onEvent('expandChange', $event)">
+</td>
+<td *ngIf="hasCheckBox" [nzChecked]="checked" (nzCheckedChange)="__onEvent('checkedChange', $event)">
+</td>
+<ng-container *ngFor="let col of cols; let __idx = index">
+    <td [style]="col.dataStyle" (click)="__onEvent('cellClick', col.code)"
+        (mouseover)="__onEvent('mouseover', col.code)">
+        <app-cell [col]="col" [item]="item"></app-cell>
+    </td>
+</ng-container>
+<td *ngIf="hasColumnAction && columnActions.length > 0" style="text-align: center;">
+    <ng-container *ngFor="let action of columnActions">
+        <button *ngIf="action.needConfirm!==true" nz-button nzType="default" nzShape="circle"
+            nz-tooltip="{{(action.tooltip ? action.tooltip : '') | translate}}" [nzSize]="size" style="margin: 0 1px;"
+            (click)="action.onEvent('onClick', {code: action.code, value: item})">
+            <i nz-icon [nzType]="action.icon"></i>
+        </button>
+        <button *ngIf="action.needConfirm===true" nz-button nzType="default" nzShape="circle"
+            nz-tooltip="{{(action.tooltip ? action.tooltip : '') | translate}}" [nzSize]="size" style="margin: 0 1px;"
+            nz-popconfirm [nzPopconfirmTitle]="action.confirmMessage" [nzPopconfirmBackdrop]="true"
+            (nzOnConfirm)="action.onEvent('onClick', {code: action.code, value: item})">
+            <i nz-icon [nzType]="action.icon"></i>
+        </button>
+    </ng-container>
+</td>

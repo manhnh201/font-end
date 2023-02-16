@@ -1,0 +1,65 @@
+.logo {
+  text-align: center;
+  height: 32px;
+  margin: 8px;
+  
+  overflow: hidden;
+  transition: all .3s;
+}
+
+.logo img {
+  height: 32px;
+}
+
+.logo h1 {
+  display: inline-block;
+  margin: 0 0 0 20px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  font-family: Avenir,Helvetica Neue,Arial,Helvetica,sans-serif;
+  vertical-align: middle;
+}
+
+.layout {
+  min-height: 100vh;
+}
+
+nz-header {
+  height: 48px;
+  background: #fff;
+  padding: 0;
+}
+
+nz-content {
+  margin: 24px 16px;
+}
+
+nz-breadcrumb {
+  margin: 12px 16px;
+}
+
+.inner-content {
+  padding: 24px 24px 12px 24px;
+  background: #fff;
+  height: calc(100vh - 144px);
+  overflow: auto;
+}
+
+nz-footer {
+  padding: 12px 50px;
+  text-align: center;
+}
+
+.global-spin {
+  z-index: 99999999;
+  position: absolute;
+  text-align: center;
+  background: rgba(87, 87, 87, 0.5);
+  border-radius: 4px;
+  margin-bottom: 20px;
+  padding: 30px 50px;
+  padding-top: calc(100vh/2 - 20px);
+  width: 100vw;
+  height: 100vh;
+}

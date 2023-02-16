@@ -1,0 +1,19 @@
+import { BaseDomainConfigTemplate } from "src/app/common-module/domain/base";
+import { FormField } from "src/app/common-module/dto/form-field.dto";
+import { TableColumn } from "src/app/common-module/dto/table-column";
+
+export class @@name@@ConfigTemplate extends BaseDomainConfigTemplate {
+    override detailFormFields: FormField[] = [
+    ];
+
+    override createFormFields: FormField[] = [
+    ];
+
+    override updateFormFields: FormField[] = [
+    ];
+
+    override tableColumns: TableColumn[] = [
+        { code: 'id', name: 'ID', headerStyle: "text-align: center;", dataStyle: "text-align: center;" },
+        { code: 'uuid', name: 'UUID', headerStyle: "text-align: center;", dataStyle: "text-align: center;" },
+    ];
+}

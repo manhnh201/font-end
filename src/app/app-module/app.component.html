@@ -1,0 +1,152 @@
+<div class="global-spin" *ngIf="commonService.isLoading">
+  <nz-spin nzSimple></nz-spin>
+</div>
+
+<div nz-space nzAlign="center" class="space-align-block" style="position: absolute;top: 10px; right: 10px;">
+  <div *ngIf="env.modules.length > 0">
+    <a nz-dropdown [nzDropdownMenu]="module">
+      <span nz-icon nzType="appstore" nzTheme="outline"></span>
+      {{'button.module.label' | translate}}
+      <span nz-icon nzType="down"></span>
+    </a>
+    <nz-dropdown-menu #module="nzDropdownMenu">
+      <ul nz-menu nzSelectable>
+        <ng-container *ngFor="let module of env.modules;">
+          <li *ngIf="module['type'] === 'menu'" nz-menu-item>
+            <a [href]="module['href']" target="_blank" rel="noopener noreferrer">{{module['title']}}</a>
+          </li>
+          <li *ngIf="module['type'] === 'divider'" nz-menu-divider>
+          </li>
+        </ng-container>
+      </ul>
+    </nz-dropdown-menu>
+  </div>
+
+  <div *ngIf="env['multiLang'] === true" style="padding-left: 20px;">
+    <a nz-dropdown [nzDropdownMenu]="menu">
+      <img src="{{'language.icon.src'|translate}}" height="20px">&nbsp;
+      <span nz-icon nzType="down"></span>
+    </a>
+    <nz-dropdown-menu #menu="nzDropdownMenu">
+      <ul nz-menu nzSelectable>
+        <li nz-menu-item (click)="__onEvent(AppComponentSenderEnum.language, 'en')">
+          <img src="assets/images/en-US.svg" height="20px">&nbsp;&nbsp;&nbsp;EN
+        </li>
+        <li nz-menu-item (click)="__onEvent(AppComponentSenderEnum.language, 'vi')">
+          <img src="assets/images/vi-VN.svg" height="20px">&nbsp;&nbsp;&nbsp;VN
+        </li>
+      </ul>
+    </nz-dropdown-menu>
+  </div>
+
+  <div *ngIf="env['userProfile'] === true && !authService.needLogin()" style="padding-left: 20px;">
+    <a nz-dropdown nzTrigger="click" [nzDropdownMenu]="menu" nzPlacement="bottomRight">
+      <img src="assets/images/default-avatar.png" height="32px">
+    </a>
+    <nz-dropdown-menu #menu="nzDropdownMenu">
+      <ul nz-menu nzSelectable>
+        <li nz-menu-item (click)="__onEvent(AppComponentSenderEnum.profile)">
+          <span nz-icon nzType="user"></span>&nbsp;&nbsp;&nbsp;Profile
+        </li>
+        <li nz-menu-divider></li>
+        <li nz-menu-item (click)="__onEvent(AppComponentSenderEnum.logout)">
+          <span nz-icon nzType="logout"></span>&nbsp;&nbsp;&nbsp;{{'button.logout.label'|translate}}
+        </li>
+      </ul>
+    </nz-dropdown-menu>
+  </div>
+
+  <ng-container *ngIf="env['rightDrawer'] === true">
+    <div style="padding-left: 20px;">
+      <span style="cursor: pointer;" nz-icon nzType="menu" nzTheme="outline"
+        (click)="drawerVisible = !drawerVisible"></span>
+    </div>
+  </ng-container>
+</div>
+
+<nz-drawer [nzClosable]="true" [nzVisible]="drawerVisible" nzPlacement="right"
+  (nzOnClose)="__onEvent(AppComponentSenderEnum.drawerClose); drawerVisible = false;"></nz-drawer>
+
+<ng-container *ngIf="!authService.needLogin(); else loginPage">
+  <nz-layout class="layout">
+    <nz-sider class="menu-sidebar" nzCollapsible zBreakpoint="md" [(nzCollapsed)]="isCollapsed">
+      <div class="logo">
+        <a href="#">
+          <img src="assets/images/favicon.ico" alt="logo">
+          <!-- <h1>{{env.applicationShortName | translate}}</h1> -->
+        </a>
+      </div>
+
+      <!-- Menu load theo tham số cấu hình-->
+      <ul nz-menu nzTheme="dark" nzMode="inline" [nzInlineCollapsed]="isCollapsed"
+        (nzClick)="__onEvent(AppComponentSenderEnum.nzClick, $event)">
+        <ng-container *ngFor="let menuItem of menuService.menuItems;">
+          <li *ngIf="menuItem.childs.length > 0" nz-submenu nzTitle="{{menuItem.title}}" nzIcon="{{menuItem.icon}}"
+            [(nzOpen)]="menuItem.open"
+            (nzOpenChange)="__onEvent(AppComponentSenderEnum.nzOpenChange, {item: menuItem, event: $event})">
+            <ul>
+              <ng-container *ngFor="let menuItemLv2 of menuItem.childs;">
+                <li *ngIf="menuService.getShowMenu(menuItemLv2.childs).length > 0" nz-submenu
+                  nzTitle="{{menuItemLv2.title}}"
+                  (nzOpenChange)="__onEvent(AppComponentSenderEnum.nzOpenChange, {item: menuItemLv2, event: $event})">
+                  <ul>
+                    <ng-container *ngFor="let menuItemLv3 of menuService.getShowMenu(menuItemLv2.childs);">
+                      <li nz-menu-item (click)="__onEvent(AppComponentSenderEnum.onMenuItemClick, menuItemLv3)">
+                        {{menuItemLv3.title}}
+                      </li>
+                    </ng-container>
+                  </ul>
+                </li>
+                <li *ngIf="menuService.getShowMenu(menuItemLv2.childs).length === 0 && menuItemLv2.hide !== true"
+                  nz-menu-item (click)="__onEvent(AppComponentSenderEnum.onMenuItemClick, menuItemLv2)">
+                  {{menuItemLv2.title}}
+                </li>
+              </ng-container>
+            </ul>
+          </li>
+          <li *ngIf="menuItem.childs.length === 0 && menuItem.hide !== true" nz-menu-item
+            (click)="__onEvent(AppComponentSenderEnum.onMenuItemClick, menuItem)">
+            <i nz-icon nzType="{{menuItem.icon}}" nzTheme="outline"></i><span>{{menuItem.title}}</span>
+          </li>
+        </ng-container>
+        <li nz-menu-item (click)="__onEvent(AppComponentSenderEnum.logout)">
+          <i nz-icon nzType="logout" nzTheme="outline"></i><span>{{'button.logout.label'|translate}}</span>
+        </li>
+      </ul>
+      <!-- Menu load theo tham số cấu hình-->
+    </nz-sider>
+    <nz-layout class="right-layout">
+      <nz-header>
+        <nz-breadcrumb class="breadcrumb" *ngIf="hasBreadcrumb">
+          <nz-breadcrumb-item>
+            <i nz-icon nzType="home" [routerLink]="['']"></i>
+          </nz-breadcrumb-item>
+          <nz-breadcrumb-item *ngFor="let item of menuService.selectedMenuItem?.breadcrumb;let idx = index;"
+            [routerLink]="menuService.selectedMenuItem.breadcrumbRouterLink !== undefined ? menuService.selectedMenuItem.breadcrumbRouterLink[idx] : []">
+            <a>
+              <span>{{item}}</span>
+            </a>
+          </nz-breadcrumb-item>
+          <nz-breadcrumb-item *ngIf="menuService.selectedMenuItem">
+            <strong>{{menuService.selectedMenuItem.title}}</strong>
+          </nz-breadcrumb-item>
+        </nz-breadcrumb>
+      </nz-header>
+      <nz-content>
+        <ng-container *ngIf="checkWrapInCard(); else elseWrapInCard">
+          <div class="inner-content">
+            <router-outlet></router-outlet>
+          </div>
+        </ng-container>
+        <ng-template #elseWrapInCard>
+          <router-outlet></router-outlet>
+        </ng-template>
+      </nz-content>
+      <nz-footer>{{env.copyright}}</nz-footer>
+    </nz-layout>
+  </nz-layout>
+</ng-container>
+
+<ng-template #loginPage>
+  <router-outlet></router-outlet>
+</ng-template>

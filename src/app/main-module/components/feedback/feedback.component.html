@@ -1,0 +1,36 @@
+<app-domain-list
+  #appDomainList
+  [cols]="domainConfigTemplate.tableColumns"
+  [dataSet]="dataSet"
+  [hasExpand]="false"
+  [hasCheckBox]="false"
+  checkedKey="id"
+  [loading]="loading"
+  [hasColumnAction]="false"
+  [columnActions]="domainConfigTemplate.tableColumnActions"
+  [hasAction]="true"
+  [actions]="domainConfigTemplate.actions"
+  [totalRows]="totalRows"
+  [tableFilter]="tableFilter"
+  (onEvent)="onEvent($event.sender, $event.event)"
+>
+</app-domain-list>
+
+<div style="display: none;">
+  <table id="excel-table">
+    <tr>
+      <th>CusId</th>
+      <th>Type</th>
+      <th>Content</th>
+      <th>Created Date</th>
+      <th>Status</th>
+    </tr>
+    <tr *ngFor="let item of dataExport">
+      <td>{{item.cusId}}</td>
+      <td>{{item.type}}</td>
+      <td>{{item.content}}</td>
+      <td>{{item.createdDate}}</td>
+      <td>{{item.status}}</td>
+    </tr>
+  </table>
+</div>

@@ -1,0 +1,28 @@
+import { Component, OnInit } from '@angular/core';
+import { DomainBaseComponent } from 'src/app/common-module/components/domain/base/domain.component';
+import { BaseDomainConfigTemplate } from 'src/app/common-module/domain/base';
+import { CommonService } from 'src/app/common-module/services/common/common.service';
+import { NotificationService } from 'src/app/common-module/services/notification/notification.service';
+import { @@name@@ConfigTemplate } from '../../domain/@@nameInKebabCase@@/@@nameInKebabCase@@.domain';
+import { @@name@@Service } from '../../services/@@nameInKebabCase@@/@@nameInKebabCase@@.service';
+
+@Component({
+  selector: 'app-@@nameInKebabCase@@',
+  templateUrl: '../../../common-module/components/domain/base/domain.component.html',
+  styleUrls: ['./@@nameInKebabCase@@.component.css']
+})
+export class @@name@@Component extends DomainBaseComponent implements OnInit {
+  override domainConfigTemplate: BaseDomainConfigTemplate = new @@name@@ConfigTemplate();
+
+  constructor(commonService: CommonService, notification: NotificationService, domainService: @@name@@Service) {
+    super(commonService, notification, domainService);
+  }
+
+  ngOnInit(): void {
+    this.onInit();
+  }
+
+  override onEvent(sender: any, event?: any): void {
+    super.onEvent(sender, event);
+  }
+}

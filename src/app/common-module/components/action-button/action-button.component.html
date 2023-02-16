@@ -1,0 +1,55 @@
+<ng-container *ngIf="action.actions && action.actions.length > 0; else elseBlock1">
+    <button *ngIf="action.needConfirm!==true" nz-button nzType="primary" [nzSize]="size" style="margin-left: 5px"
+        nz-tooltip="{{(action.tooltip ? action.tooltip : '') | translate}}" nz-dropdown [nzDropdownMenu]="menu"
+        (click)="__onEvent('onClick', {code: action.code, value: undefined})">
+        <i nz-icon [nzType]="action.icon" nzTheme="outline"></i>
+        {{action.name | translate}}
+        <span nz-icon nzType="down"></span>
+    </button>
+    <button *ngIf="action.needConfirm===true" nz-button nzType="primary" [nzSize]="size" style="margin-left: 5px"
+        nz-tooltip="{{(action.tooltip ? action.tooltip : '') | translate}}" nz-dropdown [nzDropdownMenu]="menu"
+        nz-popconfirm [nzPopconfirmBackdrop]="true" [nzPopconfirmTitle]="action.confirmMessage"
+        (nzOnConfirm)="__onEvent('onClick', {code: action.code, value: undefined})">
+        <i nz-icon [nzType]="action.icon" nzTheme="outline"></i>
+        {{action.name | translate}}
+        <span nz-icon nzType="down"></span>
+    </button>
+    <nz-dropdown-menu #menu="nzDropdownMenu">
+        <ul nz-menu>
+            <ng-container *ngFor="let __action of action.actions">
+                <li *ngIf="__action.needConfirm===true" nz-menu-item nz-popconfirm [nzPopconfirmBackdrop]="true"
+                    [nzPopconfirmTitle]="__action.confirmMessage"
+                    nz-tooltip="{{(__action.tooltip ? __action.tooltip : '') | translate}}"
+                    (nzOnConfirm)="__onEvent('onClick', {code: __action.code, value: undefined})">
+                    <a>
+                        <i nz-icon [nzType]="__action.icon" nzTheme="outline"></i>
+                        {{__action.name | translate}}
+                    </a>
+                </li>
+                <li *ngIf="__action.needConfirm!==true" nz-menu-item
+                    nz-tooltip="{{(__action.tooltip ? __action.tooltip : '') | translate}}"
+                    (click)="__onEvent('onClick', {code: __action.code, value: undefined})">
+                    <a>
+                        <i nz-icon [nzType]="__action.icon" nzTheme="outline"></i>
+                        {{__action.name | translate}}
+                    </a>
+                </li>
+            </ng-container>
+        </ul>
+    </nz-dropdown-menu>
+</ng-container>
+<ng-template #elseBlock1>
+    <button *ngIf="action.needConfirm!==true" nz-button nzType="primary" [nzSize]="size" style="margin-left: 5px"
+        nz-tooltip="{{(action.tooltip ? action.tooltip : '') | translate}}"
+        (click)="__onEvent('onClick', {code: action.code, value: undefined})">
+        <i nz-icon [nzType]="action.icon" nzTheme="outline"></i>
+        {{action.name | translate}}
+    </button>
+    <button *ngIf="action.needConfirm===true" nz-button nzType="primary" [nzSize]="size" style="margin-left: 5px"
+        nz-tooltip="{{(action.tooltip ? action.tooltip : '') | translate}}" nz-popconfirm [nzPopconfirmBackdrop]="true"
+        [nzPopconfirmTitle]="action.confirmMessage"
+        (nzOnConfirm)="__onEvent('onClick', {code: action.code, value: undefined})">
+        <i nz-icon [nzType]="action.icon" nzTheme="outline"></i>
+        {{action.name | translate}}
+    </button>
+</ng-template>

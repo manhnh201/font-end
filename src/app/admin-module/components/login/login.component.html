@@ -1,0 +1,40 @@
+<img class="login-image" src="assets/images/login-img.jpg">
+<div class="login-area">
+  <div style="position: absolute; top: 200px; text-align: center; width: calc(100vw/2);">
+    <div style="padding-bottom: 32px;">
+      <span class="login-title">{{environment.applicationShortName | translate}}</span>
+    </div>
+    <form nz-form [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Please input your username!">
+          <nz-input-group nzPrefixIcon="user" style="border-radius: 5px;">
+            <input type="text" nz-input formControlName="username" placeholder="Enter your Username" />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Please input your Password!">
+          <nz-input-group nzPrefixIcon="lock" style="border-radius: 5px;">
+            <input type="password" nz-input formControlName="password" placeholder="Enter your Password" />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+      <button nz-button class="login-form-button login-form-margin" style="background: #FDAF17; border-radius: 5px;"
+        [nzType]="'primary'">
+        <span
+          style="font-family: 'SF Pro Display'; font-style: normal; font-weight: 500; font-size: 16px; color: #1A150A;">
+          {{'button.login.label'|translate}}
+        </span>
+      </button>
+    </form>
+    <div class="login-sso" *ngIf="environment.oidc.enable">
+      <span>--Or--</span>
+      <div>
+        <app-login-sso-button></app-login-sso-button>
+      </div>
+    </div>
+  </div>
+  <div style="position: absolute; top: calc(100vh - 30px); width: calc(100vw/2); text-align: center;">
+    <span class="copyright-text">{{environment.copyright}}</span>
+  </div>
+</div>

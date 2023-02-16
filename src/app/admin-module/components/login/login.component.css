@@ -1,0 +1,57 @@
+.login-form {
+  padding-top: 10px;
+  max-width: 300px;
+  margin: auto;
+}
+
+.login-sso {
+  max-width: 300px;
+  margin: auto;
+}
+
+.login-form-margin {
+  margin-bottom: 16px;
+}
+
+.login-form-forgot {
+  float: right;
+}
+
+.login-form-button {
+  width: 100%;
+}
+
+.login-image {
+  position: absolute;
+  width: auto;
+  height: 100vh;
+  left: 0px;
+  top: 0px;
+}
+
+.login-area {
+  position: absolute;
+  width: 50vw;
+  left: 50vw;
+  text-align: center;
+}
+
+.login-logo {
+  height: 50px;
+}
+
+.login-title {
+  font-family: 'SF Pro Display';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 36px;
+}
+
+.copyright-text {
+  font-family: 'SF Pro Display';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 18px;
+}

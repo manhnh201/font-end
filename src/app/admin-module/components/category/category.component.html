@@ -1,0 +1,20 @@
+<nz-collapse>
+    <nz-collapse-panel nzHeader="Category" [nzActive]="!dataPanelActive" [nzDisabled]="false"
+        (nzActiveChange)="onEvent('panelActiveChange', $event)">
+        <app-domain-list [cols]="domainConfigTemplate.tableColumns" [dataSet]="dataSet" [hasExpand]="false"
+            [hasCheckBox]="false" [loading]="loading" [hasColumnAction]="false"
+            [columnActions]="domainConfigTemplate.tableColumnActions" [hasAction]="true"
+            [actions]="domainConfigTemplate.actions" [totalRows]="totalRows" [tableFilter]="tableFilter"
+            (onEvent)="onEvent($event.sender, $event.event)">
+        </app-domain-list>
+    </nz-collapse-panel>
+    <nz-collapse-panel nzHeader="{{selectedCategory ? selectedCategory.name : 'Category Data'}}"
+        [nzActive]="dataPanelActive" [nzDisabled]="!dataPanelActive">
+        <app-domain-list [cols]="cdConfigTemplate.tableColumns" [dataSet]="cdDataSet" [hasExpand]="false" [ajax]="false"
+            [hasContextMenu]="false" [ajax]="false" [hasCheckBox]="false" [loading]="loading" [hasColumnAction]="true"
+            [columnActions]="cdConfigTemplate.tableColumnActions" [hasAction]="true"
+            [actions]="cdConfigTemplate.actions" [totalRows]="cdTotalRows" [tableFilter]="tableFilter"
+            (onEvent)="onEvent('onCdEvent', $event)">
+        </app-domain-list>
+    </nz-collapse-panel>
+</nz-collapse>

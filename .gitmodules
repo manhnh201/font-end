@@ -1,0 +1,3 @@
+[submodule "auto-deployment"]
+	path = auto-deployment
+	url = https://bitbucket.org/tranquangtu91/auto-deployment

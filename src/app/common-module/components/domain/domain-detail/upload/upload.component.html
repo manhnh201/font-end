@@ -1,0 +1,20 @@
+<ng-container *ngIf="formField.uploadType === 'drag'">
+    <nz-upload [(nzFileList)]="value" [nzBeforeUpload]="__beforeUpload" nzType="drag"
+        [nzMultiple]="formField.uploadMultiple" [nzSize]="formField.uploadSize" [nzFileType]="formField.uploadFileType">
+        <p class="ant-upload-drag-icon">
+            <i nz-icon nzType="inbox"></i>
+        </p>
+        <p class="ant-upload-text">Click or drag file to this area to upload</p>
+        <p class="ant-upload-hint"></p>
+    </nz-upload>
+</ng-container>
+
+<ng-container *ngIf="formField.uploadType !== 'drag'">
+    <nz-upload [(nzFileList)]="value" [nzBeforeUpload]="__beforeUpload"
+        [nzMultiple]="formField.uploadMultiple" [nzSize]="formField.uploadSize" [nzFileType]="formField.uploadFileType">
+        <button nz-button>
+            <span nz-icon nzType="upload"></span>
+            Click to Upload
+        </button>
+    </nz-upload>
+</ng-container>

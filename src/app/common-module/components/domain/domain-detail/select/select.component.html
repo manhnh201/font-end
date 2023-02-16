@@ -1,0 +1,17 @@
+<nz-select *ngIf="formField.type==='select' && (formField.selectMode==='default' || formField.selectMode===undefined)"
+    nzShowSearch nzAllowClear [nzServerSearch]="formField.serverSearch === true"
+    nzPlaceHolder="Select {{formField.name}}" [nzDropdownRender]="renderTemplate"
+    (nzOnSearch)="__onEvent('onSearch', {code: formField.code, value: $event})" [(ngModel)]="value"
+    (ngModelChange)="__onEvent('modelChange', $event)">
+    <nz-option *ngFor="let option of formField.options" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
+</nz-select>
+<nz-select *ngIf="formField.type==='select' && (formField.selectMode==='multiple' || formField.selectMode==='tags')"
+    [nzTokenSeparators]="[',', '|',]" nzShowSearch nzAllowClear [nzServerSearch]="formField.serverSearch === true"
+    [nzMode]="formField.selectMode" nzPlaceHolder="Select {{formField.name}}" [nzDropdownRender]="renderTemplate"
+    (nzOnSearch)="__onEvent('onSearch', {code: formField.code, value: $event})" [(ngModel)]="value"
+    (ngModelChange)="__onEvent('modelChange', $event)">
+    <nz-option *ngFor="let option of formField.options" [nzLabel]="option.label" [nzValue]="option.value"></nz-option>
+</nz-select>
+<ng-template #renderTemplate>
+    <nz-spin *ngIf="formField.isLoading"></nz-spin>
+</ng-template>

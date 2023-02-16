@@ -1,0 +1,14 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { BaseDomainService } from 'src/app/common-module/services/base-domain/base-domain.service';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class @@name@@Service extends BaseDomainService {
+  domainName: string = "@@nameInKebabCase@@";
+
+  constructor(http: HttpClient) {
+    super(http);
+  }
+}
